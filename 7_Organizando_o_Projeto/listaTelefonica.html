@@ -1,0 +1,60 @@
+<html ng-app="listaTelefonica">
+<head>
+	<meta charset="UTF-8">
+	<title>Lista Telefonica</title>
+	<link rel="stylesheet" type="text/css" href="lib/bootstrap/bootstrap.css">
+	<link rel="stylesheet" type="text/css" href="css/app.css">
+	
+	<!-- importacoes: -->
+	<script src="lib/angular/angular.js"></script>
+	<script src="lib/angular/angular-messages.js"></script>
+	<script src="lib/angular/angular-locale_pt-br.js"></script>
+	<script src="js/app.js"></script>
+	<script src="js/controllers/listaTelefonicaCtrl.js"></script>
+	<!-- fim importacoes -->
+
+</head>
+<body ng-controller="listaTelefonicaCtrl">
+	<div class="jumbotron">
+		<h3>{{app}}</h3>
+
+		<input class="form-control" type="text" ng-model="criterioDeBusca" placeholder="O que você está buscando?"/> 
+
+		<table ng-show="contatos.length > 0" class="table">
+			<tr>
+				<th></th>
+				<th> <a href="" ng-click="ordenarPor('nome')"> Nome </a> </th>
+				<th> <a href="" ng-click="ordenarPor('telefone')"> Telefone </a> </th>
+				<th>Operadora</th>
+				<th>Data</th>
+				<th></th>  <!-- coluna da cor -->
+			</tr>
+			<tr ng-class="{'selecionado negrito': contato.selecionado}" ng-repeat="contato in contatos | limitTo:2 | filter:{nome: criterioDeBusca} | orderBy:criterioDeOrdenacao:direcaoDaOrdenacao "> 
+			<!-- orderBy:criterioDeOrdenacao:true ordena quando o usuario clica na coluna e o true gera de forma invertida. -->
+			<!-- orderBy:'-nome' ordena por uma coluna especifica e na ordem invertida. -->
+			<!-- filter faz um filtro no contato de acordo com o campo input. se deixar sem  a variavel nome, faz o filtro em todas as colunas. -->
+				<td><input type="checkbox" ng-model="contato.selecionado"/></td>
+				<td>{{contato.nome | uppercase | limitTo:4 }}</td>   <!-- converte para maiuscula -->
+				<td>{{contato.telefone}}</td>
+				<td>{{contato.operadora.nome | lowercase}} </td>  <!-- | lowercase converte para minuscula -->
+				<td><div style="width: 20px; height: 20px;" ng-style="{'background-color': contato.cor}"></div></td>
+				<td> {{contato.data | date:' MMMM EEEE dd/MM/yyyy HH:mm'}} </td>  <!-- data: converte a data mostrada , MMMM mÊs, EEEE semana. -->
+			</tr>
+		</table>
+		<hr/>
+		<input class="form-control" type="text" ng-model="contato.nome" placeholder="Nome"/>
+		<input class="form-control" type="text" ng-model="contato.telefone" placeholder="Telefone"/>
+		<select class="form-control" ng-model="contato.operadora" ng-options="operadora.nome + ' ( ' + (operadora.preco | currency) + ' )' for operadora in operadoras | orderBy:'nome' ">
+			<option value="">Selecione uma operadora</option>
+		</select>
+		<button class="btn btn-primary btn-block" ng-click="adicionarContato(contato)" ng-disabled="!contato.nome || !contato.telefone">Adicionar Contato</button>
+		<button class="btn btn-danger btn-block" ng-click="apagarContatos(contatos)" ng-if="isContatoSelecionado(contatos)">Apagar Contatos</button>
+
+		{{ 100.26 | number:1 }} <!-- arredondamento. -->
+		{{ 100.555555 | number:2 }} <!-- arredondamento. -->
+
+	</div>
+	<div ng-include="'view/footer.html'"></div>
+
+</body>
+</html>
