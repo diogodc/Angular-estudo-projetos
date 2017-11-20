@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+
+<html ng-app="helloWorld">
+<head>
+	<title>helloWorld</title>
+	<script src="angular.js"></script>
+
+	<script>
+		angular.module("helloWorld", []); //criar o modulo.
+		angular.module("helloWorld").controller("helloWorldCtrl", function ($scope) {
+			$scope.message = "Hello World! (mensagem do scope a ser mostrada).";
+		} ); //localiza o modulo, com o controle.
+
+
+
+	</script>
+
+</head>
+<body>
+	<div ng-controller="helloWorldCtrl">
+	{{message}}
+	</div>
+
+
+</body>
+</html>

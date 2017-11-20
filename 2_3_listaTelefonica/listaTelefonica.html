@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+
+<html ng-app="listaTelefonica">
+<head>
+	<title>Lista Telefonica</title>
+
+	<link rel="stylesheet" type="text/css" href="lib/bootstrap/bootstrap.css">
+
+	<style>
+		.jumbotron {
+			width: 400px;
+			text-align: center;
+			margin-top: 20px;
+			margin-left: auto;
+			margin-right: auto;
+		}  /* fecha style */ 
+
+		.table{
+			margin-top: 20px;
+
+		}  /*  fehca style da table */
+
+		.form-control {
+			margin-bottom: 5px;
+		} 
+
+		.selecionado {background-color: yellow;
+		}
+
+
+	</style>
+
+	<script src="lib/angular/angular.js"></script>
+	<script>
+		angular.module("listaTelefonica", []);
+		angular.module("listaTelefonica").controller("listaTelefonicaCtrl", function ($scope) {
+ 
+			$scope.app = "Lista Telefonica do scope como expressao.";
+			$scope.contatos = [];
+			/*	{nome: "Pedro1", telefone: "99991111"},
+				{nome: "Ana2", telefone: "99992222"},
+				{nome: "Maria3", telefone: "99993333"} 
+			]; // arraylist de contatos.
+			*/
+
+			$scope.operadoras = [
+				{nome: "Oi", codigo: 14, categoria: "Celular"},
+				{nome: "Vivo", codigo: 15, categoria: "Celular"},
+				{nome: "Tim", codigo: 41, categoria: "Celular"},
+				{nome: "GVT", codigo: 25, categoria: "Fixo"},
+				{nome: "Embratel", codigo: 21, categoria: "Fixo"}
+			];  //arraylist de operadoas.
+
+			$scope.adicionarContato = function (contato) {
+				$scope.contatos.push( angular.copy(contato) ); // o angular passa o objeto formatado igual ao array.
+				// angular.copy copiar o objeto para não repetir na tabela.
+				delete $scope.contato; // deleta o scope como objeto. 
+			}; // fim adicionarContato.
+ 
+			$scope.classe = "selecionado";
+
+		}); //localizar o module com uma function que compartilha o scope. 
+
+	</script>
+
+</head>
+<body ng-controller="listaTelefonicaCtrl">
+	
+	<div class="jumbotron">
+		<h3 ng-bind="app"> </h3>  <!-- app pega o scope.app -->
+		<h4> {{app + ' concatenado com string teste.'}} </h4> <!-- segunda forma de exibir a expressao. dá para concatenar strings -->
+		<h4> {{10*2}} </h4>  <!-- dá para efetuar operações matematicas. -->
+		<table ng-show="contatos.length > 0" class="table table-striped"> <!-- ou ng-hide,  ou ng-if para eliminar o elemento no adon.-->
+			<tr>
+				<th></th>
+				<th>Nome</th>
+				<th>Telefone</th>
+				<th>Operadora</th>
+			</tr>
+
+			<tr ng-class=" {selecionado: contato.selecionado} " ng-repeat="contato in contatos"> <!-- vai repetir quantas vezes possuir item no contatos -->
+			<!-- ngclass e ngstyle aplica classes CSS e estilos dinamiamento -->
+				<td> <input type="checkbox" ng-model="contato.selecionado"/> </td>
+				<td> {{contato.nome}} </td>
+				<td> {{contato.telefone}} </td>
+				<td> {{contato.operadora.nome}} </td>
+			</tr>
+			<!-- objetos dinamicos outro jeito de fazer.
+			<tr ng-repeat="contato in contatos">
+				<td ng-repeat="(key,value) in contato"> 
+					{{value + ' - ' + key}}
+				</td>
+			</tr>
+			 -->
+
+   		</table>
+   		<hr/>
+   		<input class="form-control" type="text" ng-model="contato.nome" placeholder="nomeee" />  <!--  ngmodel com contato.nome adiciona um array automaticamente pelo Angular. -->
+   		<input class="form-control" type="text" ng-model="contato.telefone" placeholder="telefonee" />
+   		
+   		<select class="form-control" ng-model="contato.operadora" ng-options="operadora.nome group by operadora.categoria for operadora in operadoras"> <!-- nome campo for variavel in elemento do scope. -->
+   		<!-- ngOptions renderiza as opcoes de um select	-->
+   			<option value="">Selecione uma operadora</option>
+   		</select>
+
+   		<button class="btn btn-primary btn-block" ng-click="adicionarContato(contato)" ng-disabled="!contato.nome || !contato.telefone" >Adicionar Contato</button> 
+   		<!-- o parmaetro "contato" passa automaticcamente pelo angular igual ao array nome: , telefone: -->
+   		<!-- ng-disableddesabilita um elemento dinamicamente. -->
+   		{{contato}}  <!--  aparecer na pagina em tempo real. --> 
+
+	</div>
+
+	<div ng-include="'footer.html'">  </div>
+
+</body>
+</html>
