@@ -5,14 +5,6 @@
  */
 (function(window, angular) {'use strict';
 
-// NOTE: ADVANCED_OPTIMIZATIONS mode.
-//
-// This file is compiled with Closure compiler's ADVANCED_OPTIMIZATIONS flag! Be wary of using
-// constructs incompatible with that mode.
-
-/* global isFunction: false */
-/* global noop: false */
-/* global toJson: false */
 
 function stringify(value) {
   if (value == null /* null/undefined */) { return ''; }
